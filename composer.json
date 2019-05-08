@@ -1,6 +1,6 @@
 {
-    "name": "lumenapi",
-    "description": "Lumen base API.",
+    "name": "baselumenapi",
+    "description": "Base Lumen API.",
     "keywords": ["framework", "laravel", "lumen"],
     "license": "MIT",
     "type": "project",

@@ -1,4 +1,4 @@
-# Lumen base API
+# Base Lumen API
 
 Initial structure as a starting point for the development of an API in PHP with Lumen & Dingo.
 
@@ -8,7 +8,7 @@ Initial structure as a starting point for the development of an API in PHP with 
 
 ## Setup
 
-Clone repository
+Clone repository and then within the root folder:
 
 ```shell
 $ composer install
