@@ -25,6 +25,14 @@ $app->withFacades();
 
 $app->withEloquent();
 
+$app->configure('filesystems');
+
+$app->configure('services');
+
+$app->configure('mail');
+
+$app->configure('cors');
+
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
@@ -58,12 +66,13 @@ $app->singleton(
 */
 
 $app->middleware([
-    App\Http\Middleware\CORSMiddleware::class
+    \Barryvdh\Cors\HandleCors::class,
 ]);
 
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+$app->routeMiddleware([
+    'auth'       => App\Http\Middleware\Authenticate::class,
+    'cors'       => \Barryvdh\Cors\HandleCors::class,
+]);
 
 /*
 |--------------------------------------------------------------------------
@@ -76,14 +85,27 @@ $app->middleware([
 |
 */
 
-// $app->register(App\Providers\AppServiceProvider::class);
-// $app->register(App\Providers\AuthServiceProvider::class);
+$app->register(App\Providers\AppServiceProvider::class);
+$app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
 // Dingo Adapter for Lumen
-$app->register(Zeek\LumenDingoAdapter\Providers\LumenDingoAdapterServiceProvider::class);
+$app->register(Dingo\Api\Provider\LumenServiceProvider::class);
+
+// JWT
+$app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
+
+// Cors
+$app->register(Barryvdh\Cors\ServiceProvider::class);
+
 // Lumen Generator
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
+
+// Mail Service
+$app->register(Illuminate\Mail\MailServiceProvider::class);
+$app->alias('mailer', Illuminate\Mail\Mailer::class);
+$app->alias('mailer', Illuminate\Contracts\Mail\Mailer::class);
+$app->alias('mailer', Illuminate\Contracts\Mail\MailQueue::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -99,7 +121,7 @@ $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
 ], function ($router) {
-    require __DIR__.'/../routes/web.php';
+    require __DIR__.'/../routes/api.php';
 });
 
 return $app;
